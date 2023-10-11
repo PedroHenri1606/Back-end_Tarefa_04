@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter
 @AllArgsConstructor
-public class PessoaDTO {
+@NoArgsConstructor
+public class LivroDTO {
 
-	private Long id;
-	private String nome;
-	private int idade;
-	
+    private Long id;
+    private String titulo;
+    private String autor;
 }

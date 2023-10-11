@@ -16,6 +16,15 @@ public class PessoaService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 
+	public PessoaDTO buscarPorId(Long id){
+
+		 Pessoa pessoa = pessoaRepository.findById(id).orElse(null);
+
+		 PessoaDTO pessoaDTO = toPessoaDTO(pessoa);
+
+		 return pessoaDTO;
+	}
+
 	public List<PessoaDTO> listAll(){
 		List<Pessoa> lista = pessoaRepository.findAll();
 		List<PessoaDTO> listaDTO = new ArrayList<>();
@@ -32,6 +41,21 @@ public class PessoaService {
 		Pessoa pessoasalva = pessoaRepository.save(pessoa);
 
 		return this.toPessoaDTO(pessoasalva);
+	}
+
+	public PessoaDTO editar(Long id, PessoaDTO pessoaNovoDTO){
+
+		Pessoa pessoa = pessoaRepository.findById(id).orElse(null);
+
+		pessoa.setNome(pessoaNovoDTO.getNome());
+		pessoa.setIdade(pessoaNovoDTO.getIdade());
+
+		return pessoaNovoDTO = toPessoaDTO(pessoa);
+	}
+
+	public String deletar(Long id){
+		pessoaRepository.deleteById(id);
+		return "Deletado com sucesso!";
 	}
 
 	private PessoaDTO toPessoaDTO(Pessoa pessoa) {
