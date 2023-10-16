@@ -2,7 +2,6 @@ package app.controller;
 
 import java.util.List;
 
-import app.dto.LivroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +13,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/pessoa")
-@CrossOrigin(	origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class PessoaController {
 	
 	@Autowired
 	private PessoaService pessoaService;
-	
+
 	@GetMapping(value = "/buscar")
+	public ResponseEntity<PessoaDTO> buscarPorId(@RequestParam("id") final Long id){
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(pessoaService.buscarPorId(id));
+		} catch (Exception e){
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error " + e.getMessage());
+		}
+	}
+
+	@GetMapping(value = "/listar")
 	private ResponseEntity<List<PessoaDTO>> listAll(){
 		try {		
 			List<PessoaDTO> lista = pessoaService.listAll();
@@ -30,7 +38,7 @@ public class PessoaController {
 		}
 	}
 	
-	@PostMapping
+	@PostMapping(value = "/cadastrar")
 	private ResponseEntity<PessoaDTO> save(@RequestBody PessoaDTO pessoaDTO){
 		try {		
 			PessoaDTO pessoaSalva = pessoaService.save(pessoaDTO);
@@ -51,9 +59,10 @@ public class PessoaController {
 	}
 
 	@DeleteMapping(value = "/deletar")
-	public ResponseEntity<String> deletar(@RequestParam("id") final Long id){
+	public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(pessoaService.deletar(id));
+			pessoaService.deletar(id);
+			return ResponseEntity.status(HttpStatus.OK).build();
 
 		} catch (Exception e){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error" + e.getMessage());

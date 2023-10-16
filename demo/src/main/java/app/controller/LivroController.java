@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/livro")
 public class LivroController {
 
@@ -38,7 +38,7 @@ public class LivroController {
         }
     }
 
-    @PostMapping
+    @PostMapping(value = "/cadastrar")
     public ResponseEntity<LivroDTO> salvar(@RequestBody LivroDTO livroDTO){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(service.save(livroDTO));
@@ -59,9 +59,10 @@ public class LivroController {
     }
 
     @DeleteMapping(value = "/deletar")
-    public ResponseEntity<String> deletar(@RequestParam("id") final Long id){
+    public ResponseEntity<?> deletar(@RequestParam("id") final Long id){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(service.deletar(id));
+            service.deletar(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
 
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error" + e.getMessage());

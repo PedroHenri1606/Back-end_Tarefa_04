@@ -14,7 +14,7 @@ import app.repository.PessoaRepository;
 public class PessoaService {
 
 	@Autowired
-	private PessoaRepository pessoaRepository;
+	public PessoaRepository pessoaRepository;
 
 	public PessoaDTO buscarPorId(Long id){
 
@@ -50,12 +50,13 @@ public class PessoaService {
 		pessoa.setNome(pessoaNovoDTO.getNome());
 		pessoa.setIdade(pessoaNovoDTO.getIdade());
 
-		return pessoaNovoDTO = toPessoaDTO(pessoa);
+		Pessoa pessoaSalvo = pessoaRepository.save(pessoa);
+
+		return pessoaNovoDTO = toPessoaDTO(pessoaSalvo);
 	}
 
-	public String deletar(Long id){
+	public void deletar(Long id){
 		pessoaRepository.deleteById(id);
-		return "Deletado com sucesso!";
 	}
 
 	private PessoaDTO toPessoaDTO(Pessoa pessoa) {

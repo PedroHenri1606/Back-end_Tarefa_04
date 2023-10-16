@@ -1,8 +1,6 @@
 package app.service;
 
-import app.dto.CarroDTO;
 import app.dto.LivroDTO;
-import app.entity.Carro;
 import app.entity.Livro;
 import app.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +49,13 @@ public class LivroService {
         livro.setTitulo(livroNovoDTO.getTitulo());
         livro.setAutor(livroNovoDTO.getAutor());
 
-        return livroNovoDTO = toLivroDTO(livro);
+        Livro livroSalvo = repository.save(livro);
+
+        return livroNovoDTO = toLivroDTO(livroSalvo);
     }
 
-    public String deletar(Long id){
+    public void deletar(Long id){
         repository.deleteById(id);
-        return "Deletado com sucesso!";
     }
 
     private LivroDTO toLivroDTO(Livro livro) {

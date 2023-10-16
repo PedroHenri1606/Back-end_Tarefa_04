@@ -48,14 +48,15 @@ public class CarroService {
         Carro carro = repository.findById(id).orElse(null);
 
         carro.setMarca(carroNovoDTO.getMarca());
-        carro.setModelo(carroNovoDTO.getMarca());
+        carro.setModelo(carroNovoDTO.getModelo());
 
-        return carroNovoDTO = toCarroDTO(carro);
+        Carro carroSalvo = repository.save(carro);
+
+        return carroNovoDTO = toCarroDTO(carroSalvo);
     }
 
-    public String deletar(Long id){
+    public void deletar(Long id){
         repository.deleteById(id);
-        return "Deletado com sucesso!";
     }
 
     private CarroDTO toCarroDTO(Carro carro) {
